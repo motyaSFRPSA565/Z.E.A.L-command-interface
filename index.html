@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z.E.A.L. — командный интерфейс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', 'Arial Narrow', monospace;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .zeal-terminal {
+            max-width: 1000px;
+            width: 100%;
+            background: #0f0f0f;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 30px #ffd70033, 0 0 0 1px #ffd700 inset;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #ffd700;
+            font-size: 48px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #ffd700;
+        }
+
+        .header p {
+            color: #ffd700;
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .login-section {
+            border: 2px solid #ffd700;
+            padding: 30px;
+            margin-bottom: 30px;
+            background: #0f0f0f;
+        }
+
+        .login-section h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #ffd700;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .emergency-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .emergency-btn {
+            width: 100%;
+            padding: 50px;
+            background: #cc0000;
+            border: 3px solid #ffd700;
+            color: white;
+            font-size: 36px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 30px #ff0000;
+        }
+
+        .emergency-btn:hover {
+            background: #ff0000;
+            transform: scale(1.02);
+            box-shadow: 0 0 50px #ff0000;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px #ff0000; }
+            50% { box-shadow: 0 0 60px #ff0000; }
+            100% { box-shadow: 0 0 20px #ff0000; }
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .command-btn {
+            padding: 20px;
+            background: #1a1a1a;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .command-btn:hover {
+            background: #ffd700;
+            color: #0a0a0a;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        .command-btn span:first-child {
+            font-size: 28px;
+        }
+
+        .special-section {
+            margin: 30px 0;
+            border: 2px solid #ffd700;
+            padding: 20px;
+            background: #1a1a1a;
+        }
+
+        .special-section h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ffd700;
+            text-align: center;
+            color: #ffd700;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .gold-text {
+            color: #ffd700;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #1a1a1a;
+            border: 1px solid #ffd700;
+            color: #0f0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="zeal-terminal" id="terminal">
+        <!-- ШАПКА -->
+        <div class="header">
+            <h1>Z•E•A•L</h1>
+            <p>zenith elite assault legion</p>
+        </div>
+
+        <!-- СЕКЦИЯ ВХОДА -->
+        <div class="login-section" id="loginSection">
+            <h2>🔓 ввод позывного</h2>
+            <input type="text" class="input-field" id="operatorName" placeholder="Ваш позывной / имя">
+            <button class="btn btn-block" onclick="login()">▶ Войти в систему</button>
+        </div>
+
+        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ (скрыта до входа) -->
+        <div id="dashboard" class="hidden">
+            <!-- КРАСНАЯ КНОПКА -->
+            <div class="emergency-section">
+                <button class="emergency-btn" onclick="sendEmergency()">🚨 ЭКСТРЕННЫЙ ВЫЗОВ</button>
+            </div>
+
+            <!-- КОМАНДНАЯ ПАНЕЛЬ -->
+            <div class="command-grid">
+                <button class="command-btn" onclick="sendCommand('🛡️ Щит', 'Нужен щитоносец!')">
+                    <span>🛡️</span> <span>ЩИТ</span>
+                </button>
+                <button class="command-btn" onclick="sendCommand('🔫 Штурм', 'Штурмовики, вперёд!')">
+                    <span>🔫</span> <span>ШТУРМ</span>
+                </button>
+                <button class="command-btn" onclick="sendCommand('🏥 Лекарь', 'Медик, раненый!')">
+                    <span>🏥</span> <span>ЛЕКАРЬ</span>
+                </button>
+                <button class="command-btn" onclick="sendCommand('🔧 Ключ', 'Инженер, нужен взлом!')">
+                    <span>🔧</span> <span>КЛЮЧ</span>
+                </button>
+                <button class="command-btn" onclick="sendCommand('📡 Глаз', 'Оператор, разведку!')">
+                    <span>📡</span> <span>ГЛАЗ</span>
+                </button>
+                <button class="command-btn" onclick="sendCommand('⚡ Тень', 'Клокер, тихий выстрел!')">
+                    <span>⚡</span> <span>ТЕНЬ</span>
+                </button>
+            </div>
+
+            <!-- СПЕЦЗАПРОС -->
+            <div class="special-section">
+                <h3>💬 специальный запрос</h3>
+                <input type="text" class="input-field" id="specialRequest" placeholder="Опишите задачу...">
+                <button class="btn btn-block" onclick="sendSpecialRequest()">📨 ОТПРАВИТЬ</button>
+            </div>
+
+            <!-- КНОПКА ДЛЯ ЧАЯ (медведи) -->
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="btn" onclick="sendTeaRequest()">🐻 ЗАПРОСИТЬ ЧАЙ</button>
+            </div>
+
+            <!-- СТАТУС -->
+            <div class="status" id="status"></div>
+        </div>
+
+        <div class="footer">
+            Z.E.A.L. — личная охрана Майка Маласа
+        </div>
+    </div>
+
+    <script>
+        // Конфигурация Telegram
+        const TELEGRAM_TOKEN = '8655630023:AAHx11sDOmY7JemehAcaLfEyP907qRgzOKM';
+        const TELEGRAM_CHAT_ID = '6763299388';
+        const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+
+        let currentOperator = '';
+
+        // Вход в систему
+        function login() {
+            const name = document.getElementById('operatorName').value.trim();
+            if (!name) {
+                showStatus('❌ Введите позывной');
+                return;
+            }
+
+            currentOperator = name;
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            showStatus(`✅ Добро пожаловать, ${name}`);
+            sendToTelegram(`🔓 ${name} вошёл в систему Z.E.A.L.`);
+        }
+
+        // Экстренный вызов
+        function sendEmergency() {
+            if (!currentOperator) return;
+            sendToTelegram(`🚨 [${currentOperator}] ТРЕБУЕТ ЭКСТРЕННОЙ ПОДДЕРЖКИ!`);
+            showStatus('🚨 Экстренный вызов отправлен');
+        }
+
+        // Команда
+        function sendCommand(emoji, message) {
+            if (!currentOperator) return;
+            sendToTelegram(`${emoji} [${currentOperator}]: ${message}`);
+            showStatus(`✅ Команда "${emoji}" отправлена`);
+        }
+
+        // Спецзапрос
+        function sendSpecialRequest() {
+            if (!currentOperator) return;
+            const text = document.getElementById('specialRequest').value.trim();
+            if (!text) {
+                showStatus('❌ Введите текст запроса');
+                return;
+            }
+            sendToTelegram(`💬 [${currentOperator}]: ${text}`);
+            document.getElementById('specialRequest').value = '';
+            showStatus('✅ Запрос отправлен');
+        }
+
+        // Чай для медведей
+        function sendTeaRequest() {
+            if (!currentOperator) return;
+            sendToTelegram(`🐻 [${currentOperator}]: Медведи просят чай! ☕`);
+            showStatus('🐻 Чай скоро будет');
+        }
+
+        // Отправка в Telegram
+        function sendToTelegram(text) {
+            fetch(TELEGRAM_API, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: text,
+                    parse_mode: 'HTML'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.ok) {
+                    console.error('Ошибка Telegram:', data);
+                    showStatus('⚠️ Ошибка отправки');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                showStatus('⚠️ Ошибка соединения');
+            });
+        }
+
+        // Статус
+        function showStatus(message) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = `> ${message}`;
+            setTimeout(() => {
+                statusEl.textContent = '> Ожидание команд';
+            }, 3000);
+        }
+    </script>
+</body>
+  </html>
